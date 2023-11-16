@@ -1,10 +1,10 @@
-# aws eks --region $(terraform output -raw region) update-kubeconfig \
-# --name $(terraform output -raw cluster_name)
+# aws eks --profile infra-mgmt-admin --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
 
 # kubectl cluster-info
 
 provider "aws" {
-  region = var.region
+  region  = var.region
+  profile = "infra-mgmt-admin"
 }
 
 # Filter out local zones, which are not currently supported 
@@ -65,15 +65,15 @@ module "eks" {
     one = {
       name = "node-group-1"
 
-      instance_types = ["t2.micro"]
+      instance_types = ["t2.small"]
 
-      min_size     = 0
-      max_size     = 1
-      desired_size = 0
+      # min_size     = 0
+      # max_size     = 1
+      # desired_size = 0
 
-      # min_size     = 1
-      # max_size     = 2
-      # desired_size = 1
+      min_size     = 1
+      max_size     = 2
+      desired_size = 1
     }
 
     two = {
@@ -86,7 +86,7 @@ module "eks" {
       desired_size = 0
 
       # min_size     = 1
-      # max_size     = 2
+      # max_size     = 1
       # desired_size = 1
     }
   }
